@@ -2,9 +2,11 @@ from fastapi import FastAPI, HTTPException
 import json
 from typing import List, Dict
 from data_processing import extract_movie_type, extract_duration_period, extract_name, extract_genre
-from scraper import fetch_movie_data_for_year  # Import the scraping function and Movie model
+from scraper import extract_movie_data_for_year  # Import the scraping function and Movie model
+
 
 app = FastAPI()
+
 
 def load_movies() -> Dict[int, List[Dict]]:
     """Load the movie data from a JSON file.
@@ -17,6 +19,7 @@ def load_movies() -> Dict[int, List[Dict]]:
             return json.load(file)
     except FileNotFoundError:
         return {}
+
 
 def fetch_movie_data_for_year(year: int) -> List[Dict]:
     """Fetch the most popular movies for a given year and extract detailed information.
@@ -44,6 +47,7 @@ def fetch_movie_data_for_year(year: int) -> List[Dict]:
         )
     return movies
 
+
 def save_movies(movies: Dict[int, List[Dict]]):
     """Save the movie data to a JSON file.
 
@@ -53,6 +57,7 @@ def save_movies(movies: Dict[int, List[Dict]]):
     with open('data_storage/movies.json', 'w') as file:
         json.dump(movies, file, indent=4)
 
+
 @app.get("/movies", response_model=Dict[int, List[Dict]])
 def get_movies() -> Dict[int, List[Dict]]:
     """Retrieve all movies from the JSON file.
@@ -61,6 +66,7 @@ def get_movies() -> Dict[int, List[Dict]]:
         Dict[int, List[Dict]]: The movie data with years as keys and lists of movies as values.
     """
     return load_movies()
+
 
 @app.get("/movies/{year}", response_model=List[Dict])
 def get_movies_by_year(year: int) -> List[Dict]:
@@ -79,6 +85,7 @@ def get_movies_by_year(year: int) -> List[Dict]:
     if str(year) in movies:
         return movies[str(year)]
     raise HTTPException(status_code=404, detail="Movies not found for this year")
+
 
 @app.post("/movies/{year}", response_model=List[Dict])
 def add_movies_by_year(year: int) -> List[Dict]:
@@ -102,7 +109,8 @@ def add_movies_by_year(year: int) -> List[Dict]:
     save_movies(movies)
     return new_movies
 
-@app.put("/movies/{year}", response_model=List[Dict]])
+
+@app.put("/movies/{year}", response_model=List[Dict])
 def update_movie(year: int) -> List[Dict]:
     """Update movies for a specific year in the JSON file.
 
@@ -117,6 +125,7 @@ def update_movie(year: int) -> List[Dict]:
     movies[str(year)] = new_movies
     save_movies(movies)
     return new_movies
+
 
 @app.delete("/movies/{year}/{name}", response_model=Dict)
 def delete_movie(year: int, name: str) -> Dict:
@@ -144,6 +153,7 @@ def delete_movie(year: int, name: str) -> Dict:
             return deleted_movie
     
     raise HTTPException(status_code=404, detail="Movie not found")
+
 
 if __name__ == "__main__":
     import uvicorn
