@@ -81,23 +81,32 @@ def main():
             option = option.split(' ', 2)
 
             if option[0] == '1':
-                print(get_all_movies())
+                if len(option) > 1:
+                    print('Too many parameters.')
+                else:
+                    print(get_all_movies())
 
             elif option[0] == '2':
                 if len(option) == 2:
                     print(get_movies_by_year(option[1]))
+                elif len(option) > 2:
+                    print('Too many parameters.')
                 else:
                     print('No year specified.')
 
             elif option[0] == '3':
                 if len(option) == 2:
                     print(add_movies_by_year(option[1]))
+                elif len(option) > 2:
+                    print('Too many parameters.')
                 else:
                     print('No year specified.')
 
             elif option[0] == '4':
                 if len(option) == 2:
                     print(update_movies_by_year(option[1]))
+                elif len(option) > 2:
+                    print('Too many parameters.')
                 else:
                     print('No year specified.')
 
