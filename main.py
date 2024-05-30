@@ -24,7 +24,7 @@ def check_response(response):
 def get_all_movies():
     try:
         response = requests.get(f'{BASE_URL}/movies')
-        check_response(response)
+        return check_response(response)
     except Exception as e:
         print(f'Error: {e}')
 
@@ -32,14 +32,14 @@ def get_all_movies():
 def get_movies_by_year(year):
     try:
         response = requests.get(f'{BASE_URL}/movies/{year}')
-        check_response(response)
+        return check_response(response)
     except Exception as e:
         print(f'Error: {e}')
 
 def add_movies_by_year(year):
     try:
         response = requests.post(f'{BASE_URL}/movies/{year}')
-        check_response(response)
+        return check_response(response)
     except Exception as e:
         print(f'Error: {e}')
 
@@ -47,7 +47,7 @@ def add_movies_by_year(year):
 def update_movies_by_year(year):
     try:
         response = requests.put(f'{BASE_URL}/movies/{year}')
-        check_response(response)
+        return check_response(response)
     except Exception as e:
         print(f'Error: {e}')
 
@@ -55,7 +55,7 @@ def update_movies_by_year(year):
 def delete_movie_by_year_and_name(year, name):
     try:
         response = requests.delete(f'{BASE_URL}/movies/{year}/{name}')
-        check_response(response)
+        return check_response(response)
     except Exception as e:
         print(f'Error: {e}')
 
