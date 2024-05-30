@@ -3,6 +3,7 @@ import json
 from typing import List, Dict
 from data_processing import extract_movie_type, extract_duration_period, extract_name, extract_genre
 from scraper import extract_movie_data_for_year  # Import the scraping function and Movie model
+import socket
 
 
 app = FastAPI()
@@ -155,6 +156,26 @@ def delete_movie(year: int, name: str) -> Dict:
     raise HTTPException(status_code=404, detail="Movie not found")
 
 
+def api_run(host: str, port: int):
+    """Run the API server if it is not already running.
+
+        Args:
+            host (str): The host address to run the server.
+            port (int): The port to run the server.
+    """
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.bind((host, port))
+    except socket.error as e:
+        print('Error:', e)
+        print(f'Info: Uvicorn is already running on {host}:{port}')
+        return
+    else:
+        s.close()
+
+        import uvicorn
+        uvicorn.run(app, host = host, port = port)
+
+
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    api_run("127.0.0.100", 8000)
