@@ -1,53 +1,67 @@
 import requests
-from api import api_run
+# from api import api_run
 
 HOST = '127.0.0.100'
 PORT = 8000
 BASE_URL = f'http://{HOST}:{PORT}'
 
 
-def get_all_movies():
-    response = requests.get(f"{BASE_URL}/movies")
+def check_response(response):
     if response.status_code == 200:
-        return response.json()
+        if response.json():
+            print('Received status code:')
+            return response.json()
+        else:
+            print('No status code received.')
     else:
-        return response.text
+        if response.text:
+            print('Received text:')
+            return response.text
+        else:
+            print('No text received.')
+
+
+def get_all_movies():
+    try:
+        response = requests.get(f'{BASE_URL}/movies')
+        check_response(response)
+    except Exception as e:
+        print(f'Error: {e}')
 
 
 def get_movies_by_year(year):
-    response = requests.get(f"{BASE_URL}/movies/{year}")
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return response.text
-
+    try:
+        response = requests.get(f'{BASE_URL}/movies/{year}')
+        check_response(response)
+    except Exception as e:
+        print(f'Error: {e}')
 
 def add_movies_by_year(year):
-    response = requests.post(f"{BASE_URL}/movies/{year}")
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return response.text
+    try:
+        response = requests.post(f'{BASE_URL}/movies/{year}')
+        check_response(response)
+    except Exception as e:
+        print(f'Error: {e}')
 
 
 def update_movies_by_year(year):
-    response = requests.put(f"{BASE_URL}/movies/{year}")
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return response.text
+    try:
+        response = requests.put(f'{BASE_URL}/movies/{year}')
+        check_response(response)
+    except Exception as e:
+        print(f'Error: {e}')
 
 
 def delete_movie_by_year_and_name(year, name):
-    response = requests.delete(f"{BASE_URL}/movies/{year}/{name}")
-    if response.status_code == 200:
-        return response.json()
-    else:
-        return response.text
+    try:
+        response = requests.delete(f'{BASE_URL}/movies/{year}/{name}')
+        check_response(response)
+    except Exception as e:
+        print(f'Error: {e}')
 
 
 def main():
-    api_run(HOST, PORT)
+    # api_run(HOST, PORT)  # Has to have its own thread?
 
     while True:
         print('\nOptions menu:')
@@ -67,29 +81,29 @@ def main():
             option = option.split(' ', 2)
 
             if option[0] == '1':
-                get_all_movies()
+                print(get_all_movies())
 
             elif option[0] == '2':
                 if len(option) == 2:
-                    get_movies_by_year(option[1])
+                    print(get_movies_by_year(option[1]))
                 else:
                     print('No year specified.')
 
             elif option[0] == '3':
                 if len(option) == 2:
-                    add_movies_by_year(option[1])
+                    print(add_movies_by_year(option[1]))
                 else:
                     print('No year specified.')
 
             elif option[0] == '4':
                 if len(option) == 2:
-                    update_movies_by_year(option[1])
+                    print(update_movies_by_year(option[1]))
                 else:
                     print('No year specified.')
 
             elif option[0] == '5':
                 if len(option) == 3:
-                    delete_movie_by_year_and_name(option[1], option[2])
+                    print(delete_movie_by_year_and_name(option[1], option[2]))
                 else:
                     print('No year and/or name specified.')
 
