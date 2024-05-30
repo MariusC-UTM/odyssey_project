@@ -53,29 +53,52 @@ def main():
         print('\nOptions menu:')
         print('1 - Show all movies.')
         print('2 - Get all movies by year.')
+        print('    - Input:>2 *year*<')
         print('3 - Add all movies by year.')
+        print('    - Input:>3 *year*<')
         print('4 - Update all movies by year.')
+        print('    - Input:>4 *year*<')
         print('5 - Delete movies by year and name.')
+        print('    - Input:>5 *year* *name*<')
         print('0 - Exit.')
-        option = input('Option: ')
+        option = input('Option:> ')
 
-        if option == '1':
-            get_all_movies()
+        if option:
+            option = option.split(' ', 2)
 
-        elif option == '2':
-            get_movies_by_year(2024)
+            if option[0] == '1':
+                get_all_movies()
 
-        elif option == '3':
-            add_movies_by_year(2024)
+            elif option[0] == '2':
+                if len(option) == 2:
+                    get_movies_by_year(option[1])
+                else:
+                    print('No year specified.')
 
-        elif option == '4':
-            update_movies_by_year(2024)
+            elif option[0] == '3':
+                if len(option) == 2:
+                    add_movies_by_year(option[1])
+                else:
+                    print('No year specified.')
 
-        elif option == '5':
-            delete_movie_by_year_and_name(2024, 'Dune: Part Two')
+            elif option[0] == '4':
+                if len(option) == 2:
+                    update_movies_by_year(option[1])
+                else:
+                    print('No year specified.')
 
-        elif option == '0':
-            break
+            elif option[0] == '5':
+                if len(option) == 3:
+                    delete_movie_by_year_and_name(option[1], option[2])
+                else:
+                    print('No year and/or name specified.')
+
+            elif option[0] == '0':
+                print('Exiting.')
+                break
+
+            else:
+                print('Unknown option.')
 
 
 if __name__ == "__main__":
